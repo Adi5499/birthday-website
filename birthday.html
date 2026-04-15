@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Birthday 🎉</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  color:#fff;
+  text-align:center;
+  overflow:hidden;
+}
+
+.container{padding:30px;}
+
+h1{font-size:3rem;}
+input{
+  padding:10px;
+  border-radius:10px;
+  border:none;
+}
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.hidden{display:none;}
+
+/* gallery */
+.gallery{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:15px;
+}
+.gallery img{
+ width:100%;height:200px;
+ object-fit:cover;
+ border-radius:15px;
+}
+
+/* lightbox */
+.lightbox{
+ position:fixed;top:0;left:0;width:100%;height:100%;
+ background:rgba(0,0,0,0.9);
+ display:flex;justify-content:center;align-items:center;
+ visibility:hidden;opacity:0;transition:.3s;
+}
+.lightbox.active{visibility:visible;opacity:1;}
+
+/* confetti */
+.confetti{
+ position:fixed;width:10px;height:10px;top:-10px;
+ animation:fall linear forwards;
+}
+@keyframes fall{to{transform:translateY(100vh) rotate(360deg);opacity:0;}}
+
+/* fireworks */
+.firework{
+ position:fixed;
+ width:5px;height:5px;
+ border-radius:50%;
+ animation:explode 1s ease-out forwards;
+}
+@keyframes explode{
+ to{transform:translate(var(--x),var(--y));opacity:0;}
+}
+
+/* balloons */
+.balloon{
+ position:fixed;bottom:-100px;
+ width:40px;height:50px;
+ border-radius:50%;
+ animation:floatUp linear infinite;
+}
+@keyframes floatUp{to{transform:translateY(-120vh);}}
+
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1 id="title">🎂 Happy Birthday 🎉</h1>
+
+<input id="nameInput" placeholder="Enter Name">
+<button onclick="setName()">Set Name</button>
+
+<p>Click below for full celebration 👇</p>
+<button onclick="startParty()">Start Party 🎊</button>
+
+<p id="msg" class="hidden">You are amazing 💖</p>
+
+<h2>📸 Memories</h2>
+<div class="gallery">
+<img src="https://picsum.photos/400/300?1" onclick="openPhoto(this.src,'Memory ❤️')">
+<img src="https://picsum.photos/400/300?2" onclick="openPhoto(this.src,'Fun 😆')">
+<img src="https://picsum.photos/400/300?3" onclick="openPhoto(this.src,'Special 🌟')">
+<img src="https://picsum.photos/400/300?4" onclick="openPhoto(this.src,'Joy 💫')">
+</div>
+
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closePhoto()">
+<img id="img">
+<p id="caption"></p>
+</div>
+
+<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+<script>
+
+function setName(){
+ let name=document.getElementById('nameInput').value;
+ if(name){
+  document.getElementById('title').innerText=`🎂 Happy Birthday ${name} 🎉`;
+ }
+}
+
+function startParty(){
+ document.getElementById('msg').classList.remove('hidden');
+ document.getElementById('music').play();
+ setInterval(confettiRain,2000);
+ setInterval(fireworks,3000);
+}
+
+function openPhoto(src,text){
+ document.getElementById('lightbox').classList.add('active');
+ document.getElementById('img').src=src;
+ document.getElementById('caption').innerText=text;
+ confettiRain();
+}
+
+function closePhoto(){
+ document.getElementById('lightbox').classList.remove('active');
+}
+
+function confettiRain(){
+ for(let i=0;i<50;i++){
+  let c=document.createElement('div');
+  c.className='confetti';
+  c.style.left=Math.random()*100+'vw';
+  c.style.background=randomColor();
+  c.style.animationDuration=(Math.random()*2+2)+'s';
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),4000);
+ }
+}
+
+function fireworks(){
+ for(let i=0;i<30;i++){
+  let f=document.createElement('div');
+  f.className='firework';
+  f.style.background=randomColor();
+  f.style.left=Math.random()*100+'vw';
+  f.style.top=Math.random()*50+'vh';
+  f.style.setProperty('--x',(Math.random()*200-100)+'px');
+  f.style.setProperty('--y',(Math.random()*200-100)+'px');
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),1000);
+ }
+}
+
+function randomColor(){
+ return ['#ff6f91','#ffc75f','#f9f871','#845ec2','#00c9a7'][Math.floor(Math.random()*5)];
+}
+
+// balloons auto
+for(let i=0;i<12;i++){
+ let b=document.createElement('div');
+ b.className='balloon';
+ b.style.left=Math.random()*100+'vw';
+ b.style.background=randomColor();
+ b.style.animationDuration=(Math.random()*5+5)+'s';
+ document.body.appendChild(b);
+}
+
+</script>
+</body>
+</html>
